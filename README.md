@@ -133,21 +133,6 @@ python main.py
    - A aplicação será executada automaticamente
    - As configurações são salvas na pasta do usuário: `C:\Users\[Usuário]\VTEX_Freight_Calculator\`
 
-### Gerando o Executável
-
-Para criar seu próprio executável:
-
-1. **Execute o script de build:**
-```bash
-python build_encrypted.py
-```
-
-2. **O script irá:**
-   - Verificar dependências
-   - Instalar PyInstaller se necessário
-   - Criar o executável modular autocontido
-   - Limpar arquivos temporários
-   - Gerar `SimuladorFrete2025_Modular.exe`
 
 ## 🚀 Como Usar
 
@@ -155,23 +140,7 @@ python build_encrypted.py
 - Abra a aplicação
 - Vá para a aba "⚙️ Configurações"
 - Clique em "🔧 Configurar Empresa"
-- Preencha as informações da sua empresa:
-
-#### **Informações da Empresa**
-- **Nome da empresa**: Nome que aparecerá no cabeçalho da aplicação
-- **App Key**: Chave de aplicação da VTEX (obtida no Admin da VTEX)
-- **App Token**: Token de autenticação da VTEX (obtido no Admin da VTEX)
-
-> ⚠️ **IMPORTANTE**: O App Token deve ter permissões de acesso tanto na **conta principal** quanto em **todas as lojas** que você deseja consultar. Sem essas permissões, a aplicação não conseguirá acessar os dados das lojas.
-
-#### **Configuração de Lojas**
-- **ID da Loja**: Deve ser exatamente igual ao ID configurado no Gerenciador de Marketplace da VTEX
-- **Nome da Loja**: Nome descritivo para identificação
-- **Tipo**: Nacional (entrega em todo Brasil) ou Local (entrega regional)
-- **Propriedade**: Franquia ou Própria
-- **Conta Principal**: ⭐ **CRÍTICO** - Marque apenas UMA loja como conta principal
-
-> 🎯 **LOJA PRINCIPAL**: A loja principal é seu centro de distribuição e é usada para medir os SLAs (Service Level Agreements) das outras lojas. Apenas uma loja pode ser marcada como principal.
+- Configure sua empresa e lojas (veja seção [⚙️ Configuração](#️-configuração) para detalhes)
 
 ### 2. **Simulação de Frete**
 - **Digite o CEP** de destino (formato: 00000-000)
@@ -196,8 +165,6 @@ python build_encrypted.py
 ## ⚙️ Configuração
 
 ### Configuração da Empresa
-
-A aplicação permite configurar:
 
 #### **Informações da Empresa**
 - **Nome da empresa**: Nome que aparecerá no cabeçalho da aplicação
