@@ -103,6 +103,7 @@ A aplicação possui uma interface moderna dividida em:
 - Windows 10/11
 - Conexão com internet
 - Conta VTEX com API habilitada
+- App Key e App Token da VTEX com permissões adequadas
 
 ### Instalação Manual
 
@@ -130,6 +131,23 @@ python main.py
 2. **Execute o arquivo:**
    - Duplo clique no executável
    - A aplicação será executada automaticamente
+   - As configurações são salvas na pasta do usuário: `C:\Users\[Usuário]\VTEX_Freight_Calculator\`
+
+### Gerando o Executável
+
+Para criar seu próprio executável:
+
+1. **Execute o script de build:**
+```bash
+python build_encrypted.py
+```
+
+2. **O script irá:**
+   - Verificar dependências
+   - Instalar PyInstaller se necessário
+   - Criar o executável modular autocontido
+   - Limpar arquivos temporários
+   - Gerar `SimuladorFrete2025_Modular.exe`
 
 ## 🚀 Como Usar
 
@@ -138,10 +156,22 @@ python main.py
 - Vá para a aba "⚙️ Configurações"
 - Clique em "🔧 Configurar Empresa"
 - Preencha as informações da sua empresa:
-  - Nome da empresa
-  - Conta principal VTEX
-  - App Key e App Token
-  - Lista de lojas (pode importar do Excel)
+
+#### **Informações da Empresa**
+- **Nome da empresa**: Nome que aparecerá no cabeçalho da aplicação
+- **App Key**: Chave de aplicação da VTEX (obtida no Admin da VTEX)
+- **App Token**: Token de autenticação da VTEX (obtido no Admin da VTEX)
+
+> ⚠️ **IMPORTANTE**: O App Token deve ter permissões de acesso tanto na **conta principal** quanto em **todas as lojas** que você deseja consultar. Sem essas permissões, a aplicação não conseguirá acessar os dados das lojas.
+
+#### **Configuração de Lojas**
+- **ID da Loja**: Deve ser exatamente igual ao ID configurado no Gerenciador de Marketplace da VTEX
+- **Nome da Loja**: Nome descritivo para identificação
+- **Tipo**: Nacional (entrega em todo Brasil) ou Local (entrega regional)
+- **Propriedade**: Franquia ou Própria
+- **Conta Principal**: ⭐ **CRÍTICO** - Marque apenas UMA loja como conta principal
+
+> 🎯 **LOJA PRINCIPAL**: A loja principal é seu centro de distribuição e é usada para medir os SLAs (Service Level Agreements) das outras lojas. Apenas uma loja pode ser marcada como principal.
 
 ### 2. **Simulação de Frete**
 - **Digite o CEP** de destino (formato: 00000-000)
@@ -169,22 +199,73 @@ python main.py
 
 A aplicação permite configurar:
 
-- **Informações da Empresa**:
-  - Nome da empresa
-  - Conta principal VTEX
-  - App Key e App Token
+#### **Informações da Empresa**
+- **Nome da empresa**: Nome que aparecerá no cabeçalho da aplicação
+- **App Key**: Chave de aplicação da VTEX (obtida no Admin da VTEX)
+- **App Token**: Token de autenticação da VTEX (obtido no Admin da VTEX)
 
-- **Lojas e Filiais**:
-  - Adicionar/remover lojas
-  - Configurar códigos de filiais
-  - Definir lojas nacionais
-  - Importar/exportar lista via Excel
+> ⚠️ **PERMISSÕES NECESSÁRIAS**: O App Token deve ter acesso a:
+> - **Conta Principal**: Para consultas gerais e medição de SLAs
+> - **Todas as Lojas**: Para consultar estoque e simular frete
+> - **APIs de Logística**: Para simulação de frete e consulta de estoque
 
-- **Configurações de Performance**:
-  - Número máximo de workers
-  - Timeout de requisições
-  - SKU padrão
-  - Histórico de SKUs recentes
+#### **Lojas e Filiais**
+- **Adicionar/remover lojas**: Gerenciar lista de lojas
+- **ID da Loja**: Deve ser exatamente igual ao ID no Gerenciador de Marketplace da VTEX
+- **Tipo de Entrega**: Nacional (todo Brasil) ou Local (regional)
+- **Propriedade**: Franquia ou Própria
+- **Conta Principal**: ⭐ **CRÍTICO** - Apenas uma loja pode ser principal
+- **Importar/exportar Excel**: Gerenciar lojas em massa
+
+#### **Configurações de Performance**
+- **Número máximo de workers**: Threads paralelas (padrão: 20)
+- **Timeout de requisições**: Tempo limite por requisição (padrão: 10s)
+- **SKU padrão**: SKU inicial para simulação
+- **Histórico de SKUs recentes**: Quantos SKUs lembrar (padrão: 5)
+
+> 🔧 **CONFIGURAÇÕES OTIMIZADAS**: As configurações padrão são otimizadas para performance e estabilidade. Não é necessário alterar a menos que tenha necessidades específicas.
+
+### Fluxo de Configuração
+
+#### **1. Configuração Inicial**
+1. Abra a aplicação
+2. Vá para a aba "⚙️ Configurações"
+3. Clique em "🔧 Configurar Empresa"
+4. Preencha as informações da empresa
+5. Configure as lojas
+6. Salve as configurações
+7. Feche e reabra a aplicação para aplicar as mudanças
+
+#### **2. Configuração de Lojas**
+1. **Adicionar Loja**: Clique em "Adicionar Loja"
+2. **ID da Loja**: Use exatamente o mesmo ID do Gerenciador de Marketplace da VTEX
+3. **Nome**: Nome descritivo para identificação
+4. **Tipo**: Nacional (todo Brasil) ou Local (regional)
+5. **Propriedade**: Franquia ou Própria
+6. **Conta Principal**: ⭐ Marque apenas UMA loja como principal
+
+#### **3. Importação em Massa**
+- Use "📊 Exportar Excel" para criar template
+- Preencha o Excel com suas lojas
+- Use "📥 Importar Excel" para importar todas as lojas
+
+### 🎯 Importância da Loja Principal
+
+A **loja principal** é fundamental para o funcionamento da aplicação:
+
+#### **Funções da Loja Principal**
+- **Centro de Distribuição**: Serve como referência para medição de SLAs
+- **Medição de Performance**: Compara performance das outras lojas
+- **Configuração Automática**: A aplicação identifica automaticamente qual é a principal
+- **Apenas Uma**: Só pode haver uma loja marcada como principal
+
+#### **Como Configurar**
+1. **Adicione todas as lojas** primeiro
+2. **Marque apenas UMA** como "Conta Principal"
+3. **Salve as configurações**
+4. **Reinicie a aplicação** para aplicar as mudanças
+
+> ⚠️ **ATENÇÃO**: Se não configurar uma loja principal, a aplicação não conseguirá medir os SLAs das outras lojas corretamente.
 
 ### Estrutura de Configuração
 
@@ -226,7 +307,7 @@ A aplicação permite configurar:
 
 ## 🔧 Gerando o Executável
 
-### Método Automático
+### Método Automático (Recomendado)
 
 1. **Execute o script de build:**
 ```bash
@@ -234,10 +315,11 @@ python build_encrypted.py
 ```
 
 2. **O script irá:**
-   - Verificar dependências
+   - Verificar dependências automaticamente
    - Instalar PyInstaller se necessário
-   - Criar o executável modular
+   - Criar o executável modular autocontido
    - Limpar arquivos temporários
+   - Gerar `SimuladorFrete2025_Modular.exe`
 
 ### Método Manual
 
@@ -258,6 +340,14 @@ pyinstaller --onefile --windowed --name=SimuladorFrete2025 --icon=entrega-rapida
 - **Portável**: Pode ser copiado para qualquer lugar
 - **Configurável**: Sistema de configuração integrado
 - **Persistente**: Configurações salvas na pasta do usuário
+- **Seguro**: Configurações isoladas por usuário
+
+### Localização das Configurações
+
+- **Executável**: `C:\Users\[Usuário]\VTEX_Freight_Calculator\empresa_config.json`
+- **Script Python**: `empresa_config.json` (na pasta do projeto)
+- **Backup**: Configurações são salvas automaticamente
+- **Portabilidade**: Cada usuário tem suas próprias configurações
 
 ## 📋 Requisitos
 
@@ -331,66 +421,3 @@ simulador-de-frete/
 - **Políticas de Envio**: `/api/logistics/pvt/shipping-policies`
 - **Consulta de Estoque**: `/api/logistics/pvt/inventory/skus/{sku}`
 
-## 🤝 Contribuição
-
-### Como Contribuir
-
-1. **Fork** o projeto
-2. **Crie** uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** para a branch (`git push origin feature/AmazingFeature`)
-5. **Abra** um Pull Request
-
-### Padrões de Código
-
-- Use **PEP 8** para estilo de código
-- Documente funções e classes
-- Teste suas mudanças
-- Mantenha compatibilidade com Python 3.8+
-
-### Reportar Bugs
-
-Use o sistema de **Issues** do GitHub para reportar bugs e solicitar features.
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-## 🆘 Suporte
-
-### Problemas Comuns
-
-**❓ A aplicação não inicia**
-- Verifique se o Python 3.8+ está instalado
-- Execute `pip install -r requirements.txt`
-
-**❓ Erro de API VTEX**
-- Verifique se os tokens estão corretos
-- Confirme se a conta tem permissões de API
-
-**❓ Executável não funciona**
-- Execute como administrador
-- Verifique se o antivírus não está bloqueando
-
-**❓ Configurações não salvam**
-- Verifique permissões de escrita na pasta do usuário
-- Pasta: `C:\Users\[Usuário]\VTEX_Freight_Calculator\`
-
-### Contato
-
-- **GitHub Issues**: Para bugs e sugestões
-- **Email**: [seu-email@exemplo.com]
-- **Documentação**: [Link para documentação completa]
-
----
-
-<div align="center">
-
-**Desenvolvido com ❤️ para a comunidade VTEX**
-
-![VTEX](https://img.shields.io/badge/VTEX-Partner-red.svg)
-![Python](https://img.shields.io/badge/Made%20with-Python-blue.svg)
-
-</div>
