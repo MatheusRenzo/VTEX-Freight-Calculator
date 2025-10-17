@@ -24,6 +24,7 @@ def create_encrypted_executable():
         'threads.py',                # Threads de processamento
         'splash_screen.py',          # Tela de splash
         'entrega-rapida.ico',        # Ícone
+        'VTEX_Logo.svg.png',         # Logo da splash screen
         'tabs/__init__.py',          # Módulo de abas
         'tabs/ranking_tab.py',       # Aba de ranking
         'tabs/resumo_tab.py',        # Aba de resumo
@@ -71,6 +72,7 @@ def create_encrypted_executable():
         
         # Incluir arquivos de dados
         '--add-data=entrega-rapida.ico;.',   # Ícone
+        '--add-data=VTEX_Logo.svg.png;.',   # Logo da splash screen
     ]
     
     # Incluir JSON padrão para configuração inicial

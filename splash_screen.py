@@ -3,6 +3,25 @@ from PySide6.QtGui import QPainter, QColor, QFont, QLinearGradient, QBrush, QPen
 from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve, Property
 import json
 import os
+import sys
+
+def get_resource_path(relative_path):
+    """Obtém o caminho correto para recursos, seja em desenvolvimento ou no executável"""
+    try:
+        # PyInstaller cria uma pasta temporária e armazena o caminho em _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        # Se não estiver rodando no executável, usa o diretório atual
+        base_path = os.path.abspath(".")
+    
+    full_path = os.path.join(base_path, relative_path)
+    
+    # Verificar se o arquivo existe
+    if not os.path.exists(full_path):
+        # Se não existir, tentar no diretório atual (para desenvolvimento)
+        full_path = os.path.join(os.path.abspath("."), relative_path)
+    
+    return full_path
 
 class SplashScreen(QWidget):
     def __init__(self):
@@ -60,7 +79,17 @@ class SplashScreen(QWidget):
 
         # Logo VTEX
         self.logo = QLabel()
-        self.logo.setPixmap(QPixmap("VTEX_Logo.svg.png").scaled(120, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        logo_path = get_resource_path("VTEX_Logo.svg.png")
+        
+        # Verificar se a imagem existe antes de carregar
+        if os.path.exists(logo_path):
+            self.logo.setPixmap(QPixmap(logo_path).scaled(120, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        else:
+            # Se a imagem não existir, criar um texto como fallback
+            self.logo.setText("VTEX")
+            self.logo.setFont(QFont("Segoe UI", 16, QFont.Bold))
+            self.logo.setStyleSheet(f"color: {self.primary_color.name()};")
+        
         self.logo.setAlignment(Qt.AlignCenter)
         container_layout.addWidget(self.logo)
         
